@@ -17,13 +17,12 @@ uint32_t AS5045::encoder_degrees(void)
 
 uint32_t AS5045::encoder_value(void)
 {
-  return (read_chip() >> 6);
+  return (raw_value >> 6);
 }
 
 uint32_t AS5045::encoder_error(void)
 {
   uint16_t error_code;
-  uint32_t raw_value;
   raw_value = read_chip();
   error_code = raw_value & 0b000000000000111111;
   err_value.DECn = error_code & 2;
@@ -36,27 +35,25 @@ uint32_t AS5045::encoder_error(void)
 
 uint32_t AS5045::read_chip(void)
 {
-  uint32_t raw_value = 0;
   uint16_t inputstream = 0;
   uint16_t c;
+  raw_value = 0;
   digitalWrite(_cs, HIGH);
   digitalWrite(_clock, HIGH);
-  delay(100);
+  delay(1);
   digitalWrite(_cs, LOW);
-  delay(10);
+  delayMicroseconds(1);
   digitalWrite(_clock, LOW);
-  delay(10);
+  delayMicroseconds(1);
   for (c = 0; c < 18; c++)
   {
     digitalWrite(_clock, HIGH);
-    delay(10);
+    delayMicroseconds(1);
     inputstream = digitalRead(_data);
     raw_value = ((raw_value << 1) + inputstream);
     digitalWrite(_clock, LOW);
-    delay(10);
+    delayMicroseconds(1);
   }
- return raw_value;
+  return raw_value;
 }
-  
-
 

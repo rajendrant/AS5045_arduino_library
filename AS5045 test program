@@ -10,6 +10,7 @@ void setup()
 void loop()
 {
   long value;
+  myAS5045.read_chip();
   value = myAS5045.encoder_value();
   Serial.print("measured value: ");
   Serial.println(value);
